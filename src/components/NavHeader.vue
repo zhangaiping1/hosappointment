@@ -250,6 +250,7 @@
                             .children {
                                 height: 220px;
                                 opacity: 1;
+                                z-index: 10;
 
                             }
                         }
