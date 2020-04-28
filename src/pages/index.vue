@@ -60,15 +60,56 @@
             </swiper>
 
         </div>
-        <div class="ads-box"></div>
-        <div class="banner"></div>
-        <div class="product-box"></div>
+        <div class="ads-box">
+            <a :href="'/#/product/'+item.id" v-for="(item,index) in adsList" :key="index">
+                <img :src="item.img">
+            </a>
+        </div>
+        <div class="banner">
+            <a :href="'/#/product/'+item.id" v-for="(item,index) in bannerList" :key="index">
+                <img :src="item.img">
+            </a>
+        </div>
+        <div class="product-box">
+            <div class="container">
+                <h3>手机</h3>
+                <div class="wrapper">
+                    <div class="banner-left">
+                        <a href="/#/product/35"><img src="/imgs/mix-alpha.jpg" alt=""></a>
+                    </div>
+                    <div class="list-box">
+                        <ul class="list" v-for="(item,i) in proList" :key="i">
+                            <li class="item" v-for="(sub,j) in item">
+                                <span>新品</span>
+                                <img v-lazy="sub.mainImage" alt="">
+                                <p class="name">{{sub.name}}</p>
+                                <p class="describe">{{sub.subtitle}}</p>
+                                <p class="price" @click="ToCart(sub.id)">{{sub.price}}元</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
         <service-bar></service-bar>
+        <!--是否显示-->
+        <!--按钮样式，1:small 2:middle  3:large-->
+        <!--左上角标题-->
+        <Modal
+                :isModalShow="isModalShow"
+                isShow="1"
+                isBtn="3"
+                isBtnText="查看购物车"
+                isHref="/cart"
+                isTitle="提示"
+                @cancel="isModalShow=false"
+        ><span slot="dia-body">商品添加成功</span></Modal>
     </div>
 </template>
 
 <script>
     import ServiceBar from "../components/ServiceBar";
+    import Modal from "../components/Modal";
     import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper'
     import 'swiper/css/swiper.css'
     export default {
@@ -228,16 +269,63 @@
                         shadowOffset: 80,
                         shadowScale: 0.6
                     },
-                }
+                },
+                adsList:[
+                    {
+                        id:33,
+                        img:'/imgs/ads/ads-1.png'
+                    },
+                    {
+                        id:34,
+                        img:'/imgs/ads/ads-2.jpg'
+                    },
+                    {
+                        id:35,
+                        img:'/imgs/ads/ads-3.png'
+                    },
+                    {
+                        id:36,
+                        img:'/imgs/ads/ads-4.jpg'
+                    },
+                ],
+                bannerList:[
+                    {
+                        id:33,
+                        img:'/imgs/banner-1.png'
+                    }
+                ],
+                proList:[],
+                res:[],
+                isModalShow:false
             }
         },
         components:{
+            Modal,
             ServiceBar,
             Swiper,
-            SwiperSlide
+            SwiperSlide,
         },
         directives: {
             swiper: directive
+        },
+        methods: {
+            proListfun() {
+                this.axios.get('/products',{
+                    params:{
+                        categoryId:100012,
+                        pageSize:14
+                    }
+                }).then((res)=>{
+                    res.list = res.list.slice(6,14)
+                    this.proList = [res.list.slice(0,4),res.list.slice(4,8)]
+                })
+            },
+            ToCart(id) {
+                this.isModalShow=true;
+            },
+        },
+        mounted() {
+            this.proListfun();
         }
 
     }
@@ -249,6 +337,7 @@
     .swiper-box {
         width: 1226px;
         margin: 0 auto;
+        z-index: 9;
         .swiper-button-prev {
             padding-left: 260px;
         }
@@ -324,6 +413,114 @@
                 width: 100%;
                 height: 451px;
             }
+        }
+    }
+    .ads-box {
+        width: 1226px;
+        height: 167px;
+        display: flex;
+        justify-content: space-between;
+        margin: 20px auto 40px;
+
+        img {
+            width: 296px;
+            height: 100%;
+            flex: 1;
+        }
+    }
+    .banner {
+        width: 1226px;
+        height: 130px;
+        margin: 0 auto 50px;
+        img {
+            width: 1226px;
+            height: 130px;
+        }
+    }
+    .product-box {
+        background: #f5f5f5;
+        padding-bottom: 50px;
+        .container {
+            width: 1226px;
+            margin: 0 auto;
+            h3 {
+                font-size: 22px;
+                padding: 20px 0;
+            }
+            .wrapper {
+                display: flex;
+                justify-content: space-between;
+                .banner-left {
+                    margin-right: 10px;
+                    img {
+                        width: 224px;
+                        height: 619px;
+                    }
+                }
+                .list-box {
+                    .list {
+                        margin-bottom: 13px;
+                        &:last-child {
+                            margin-bottom: 0;
+                        }
+                        .item {
+                            display: inline-block;
+                            width: 236px;
+                            height: 302px;
+                            background: #ffffff;
+                            /*position: relative;*/
+                            margin-right: 13px;
+                            &:last-child {
+                                margin-right: 0;
+                            }
+                            img {
+                                width: 236px;
+                                height: 195px;
+                            }
+                            span {
+                                width: 67px;
+                                height: 24px;
+                                display: block;
+                                /*position: absolute;*/
+                                text-align: center;
+                                font-size: 14px;
+                                color: #ffffff;
+                                margin: 0 auto;
+                                background: #FF6600;
+
+                            }
+                            .name {
+                                font-size: 14px;
+                                text-align: center;
+                                font-weight: bold;
+                            }
+                            .describe {
+                                font-size: 12px;
+                                text-align: center;
+                                color: #999999;
+                            }
+                            .price {
+                                vertical-align: middle;
+                                font-size: 14px;
+                                color: #FF6600;
+                                text-align: center;
+                                font-weight: bold;
+                                margin-top: 10px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                cursor: pointer;
+                                &:after {
+                                    content: ' ';
+                                    @include bgImg(22px,22px,'/imgs/icon-cart-hover.png')
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+
         }
     }
 }
