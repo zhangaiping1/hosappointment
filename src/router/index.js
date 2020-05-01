@@ -10,6 +10,7 @@ import OrderConfirm from "../pages/orderConfirm";
 import OrderList from "../pages/orderList";
 import OrderPay from "../pages/orderPay";
 import AliPay from "../pages/alipay";
+import Login from "../pages/login"
 
 Vue.use(VueRouter)
 
@@ -46,6 +47,11 @@ Vue.use(VueRouter)
       // which is lazy-loaded when the route is visited.
       // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')       箭头函数方式引入
 
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
     },
     {
       path: '/order',

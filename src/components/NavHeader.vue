@@ -13,7 +13,7 @@
                     <a href="javascript:;" v-else @click="login">登陆</a>
                     <a href="javascript:;" v-if="username">我的订单</a>
 
-                    <a href="javascript:;" class="my-cart" @click="goToCart"><span class="icon-cart"></span>购物车</a>
+                    <a href="javascript:;" class="my-cart" @click="goToCart"><span class="icon-cart"></span>购物车({{cartcount}})</a>
                 </div>
             </div>
         </div>
@@ -126,9 +126,17 @@
         name: "NavHeader",
         data() {
           return {
-            username:'jake',
+            // username:this.$store.state.username,
             resList:[]
           }
+        },
+        computed:{
+            username() {
+                return this.$store.state.username
+            },
+            cartcount() {
+                return this.$store.state.CartCount
+            }
         },
         filters:{
             currency(val) {
