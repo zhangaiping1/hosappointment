@@ -54,6 +54,7 @@
  .productParam{
      width: 100%;
      background: white;
+     z-index: 9;
      .container {
          width: 1226px;
          height: 71px;
