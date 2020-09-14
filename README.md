@@ -1,5 +1,8 @@
 # hosappointment 1
 
+
+一个仿的小米的官网，不记得是不是我写的。
+
 ## Project setup
 ```
 npm install
